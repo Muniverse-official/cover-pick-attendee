@@ -16,87 +16,54 @@
       <div class="language-picker">
         <svg class="language-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21M12 3C9.5 5.6 8.2 8.6 8.2 12S9.5 18.4 12 21"></path></svg>
         <select class="lang" id="lang" aria-label="Language / 언어">
-          <option value="ko">한국어</option>
-          <option value="ja">日本語</option>
-          <option value="en">English</option>
-          <option value="zh-TW">繁體中文</option>
-          <option value="zh-CN">简体中文</option>
+          <option value="ko">한국어</option><option value="ja">日本語</option><option value="en">English</option><option value="zh-TW">繁體中文</option><option value="zh-CN">简体中文</option>
         </select>
       </div>
     </header>
 
     <section class="hero" aria-labelledby="heroTitle">
-      <div class="hero-orb hero-orb-a"></div>
-      <div class="hero-orb hero-orb-b"></div>
-      <div class="hero-content">
-        <span class="eyebrow">WINNER REGISTRATION</span>
-        <div class="its">it's live</div>
-        <div class="cover">COVER PICK</div>
-        <p class="hero-sub" id="heroTitle">Audience winner registration</p>
-      </div>
+      <div class="hero-orb hero-orb-a"></div><div class="hero-orb hero-orb-b"></div>
+      <div class="hero-content"><span class="eyebrow">WINNER REGISTRATION</span><div class="its">it's live</div><div class="cover">COVER PICK</div><p class="hero-sub" id="heroTitle">Audience winner registration</p></div>
     </section>
 
     <section class="card" id="step1">
       <div class="steps" aria-hidden="true"><i class="on"></i><i></i></div>
-      <h1 id="step1Title">Verify winner</h1>
-      <p class="lead" id="step1Desc">Test mode is active. Any email and nickname can be verified.</p>
-
-      <div class="field">
-        <label for="email" id="emailLabel">Muniverse account email</label>
-        <input id="email" type="email" maxlength="254" autocomplete="email" inputmode="email">
-      </div>
-      <div class="field">
-        <label for="nickname" id="nicknameLabel">Muniverse nickname</label>
-        <input id="nickname" maxlength="80" autocomplete="off">
-      </div>
-
-      <label class="consent-box">
-        <input id="consent" type="checkbox">
-        <span id="consentLabel">[Required] I agree to the collection and use of personal information.</span>
-      </label>
-
-      <details class="privacy" open>
-        <summary id="privacyTitle">Privacy collection scope &amp; notice</summary>
-        <div class="privacy-panel" id="privacyText"></div>
-      </details>
-
-      <div class="message" id="verifyMessage" role="status" aria-live="polite"></div>
-      <button class="primary" id="verifyBtn" type="button">Verify &amp; Continue</button>
+      <h1 id="step1Title">Verify winner</h1><p class="lead" id="step1Desc">Test mode is active. Any email and nickname can be verified.</p>
+      <div class="field"><label for="email" id="emailLabel">Muniverse account email</label><input id="email" type="email" maxlength="254" autocomplete="email" inputmode="email"></div>
+      <div class="field"><label for="nickname" id="nicknameLabel">Muniverse nickname</label><input id="nickname" maxlength="80" autocomplete="off"></div>
+      <label class="consent-box"><input id="consent" type="checkbox"><span id="consentLabel">[Required] I agree to the collection and use of personal information.</span></label>
+      <details class="privacy" open><summary id="privacyTitle">Privacy collection scope &amp; notice</summary><div class="privacy-panel" id="privacyText"></div></details>
+      <div class="message" id="verifyMessage" role="status" aria-live="polite"></div><button class="primary" id="verifyBtn" type="button">Verify &amp; Continue</button>
     </section>
 
     <section class="card hidden" id="step2">
       <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i></div>
-      <h1 id="step2Title">Attendee information</h1>
-      <p class="lead" id="step2Desc">Enter information for the audience registration flow test.</p>
-
+      <h1 id="step2Title">Attendee information</h1><p class="lead" id="step2Desc">Enter information used for identity verification and audience notices.</p>
       <div class="grid">
         <div class="field"><label for="name" id="nameLabel">Full name</label><input id="name" maxlength="100" autocomplete="name"></div>
-        <div class="field"><label for="nationality" id="nationalityLabel">Nationality</label><input id="nationality" maxlength="100" autocomplete="country-name"></div>
+        <div class="field"><label for="nationality" id="nationalityLabel">Nationality</label><select id="nationality" autocomplete="country-name"></select><p class="hint compact-hint" id="nationalityHint"></p></div>
         <div class="field"><label for="birthDate" id="birthLabel">Date of birth</label><input id="birthDate" type="date"></div>
-        <div class="field"><label for="phone" id="phoneLabel">Phone number</label><input id="phone" maxlength="30" type="tel" autocomplete="tel" placeholder="+82 10-0000-0000"></div>
       </div>
 
-      <div class="field field-top">
-        <label for="contactEmail" id="contactLabel">Email for event notices</label>
-        <input id="contactEmail" type="email" maxlength="254" autocomplete="email">
-        <p class="hint" id="contactHint">Email is also collected as a fallback for international SMS.</p>
+      <div class="field field-top phone-field">
+        <label id="phoneLabel">Phone number</label>
+        <select id="phoneMode" class="phone-mode" aria-label="Phone number type"></select>
+        <div class="phone-input-row">
+          <span class="dial-prefix" id="dialPrefix">010</span>
+          <input id="phoneLocal" maxlength="30" type="tel" autocomplete="tel" inputmode="tel" placeholder="1234-5678">
+        </div>
+        <div class="other-code hidden" id="otherCodeWrap"><label for="otherDialCode" id="otherDialLabel">Country calling code</label><input id="otherDialCode" maxlength="6" inputmode="tel" placeholder="+1"></div>
+        <input id="phone" type="hidden" value="">
+        <p class="hint" id="phoneHint"></p>
       </div>
 
-      <div class="notice" id="noticeText">Participants must be at least 15 years old.</div>
-      <div class="message error" id="submitMessage" role="status" aria-live="polite"></div>
-      <button class="primary" id="submitBtn" type="button">Test submit</button>
+      <div class="field field-top"><label for="contactEmail" id="contactLabel">Email for event notices</label><input id="contactEmail" type="email" maxlength="254" autocomplete="email"><p class="hint" id="contactHint">Email is also collected as a fallback where international SMS may not be delivered.</p></div>
+      <div class="notice" id="noticeText">Participants must be at least 15 years old.</div><div class="message error" id="submitMessage" role="status" aria-live="polite"></div><button class="primary" id="submitBtn" type="button">Test submit</button>
     </section>
 
-    <section class="card hidden" id="done">
-      <div class="done-wrap">
-        <div class="done-check">&#10003;</div>
-        <h1 id="doneTitle">Test registration complete</h1>
-        <p class="lead" id="doneDesc">No information was stored because test mode is active.</p>
-      </div>
-    </section>
-
+    <section class="card hidden" id="done"><div class="done-wrap"><div class="done-check">&#10003;</div><h1 id="doneTitle">Test registration complete</h1><p class="lead" id="doneDesc">No information was stored because test mode is active.</p></div></section>
     <footer>Muniverse &middot; it's Live COVER PICK<br>support@muniverse.io</footer>
   </main>
-  <script src="./app.js" defer></script>
+  <script src="./app.js" defer></script><script src="./phone.js" defer></script>
 </body>
 </html>
