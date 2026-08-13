@@ -1,4 +1,5 @@
-(()=>{'use strict';
+(async()=>{'use strict';
+if(!window.MC_COPY)await import('./i18n.js');
 const API='https://tcxugltvmatbgsmcepso.supabase.co/functions/v1/music-core-attendee';
 const $=id=>document.getElementById(id);
 const state={token:'',accountEmail:'',nickname:'',eventDate:''};
