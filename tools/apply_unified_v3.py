@@ -11,11 +11,7 @@ from pathlib import Path
 ROOT = Path.cwd().resolve()
 CHUNK_DIR = ROOT / "tools" / ".apply-v3"
 DELETE_PATHS = ["music-core-attendee", "privacy-minimal.js"]
-SELF_PATHS = [
-    "tools/.apply-v3",
-    "tools/apply_unified_v3.py",
-    ".github/workflows/apply-unified-v3.yml",
-]
+SELF_PATHS = ["tools/.apply-v3"]
 
 
 def safe_path(relative: str | Path) -> Path:
@@ -42,6 +38,10 @@ with tarfile.open(fileobj=io.BytesIO(payload), mode="r:gz") as archive:
     for member in archive.getmembers():
         safe_path(member.name)
     archive.extractall(ROOT)
+
+# The workflow token cannot modify workflow files. Keep the existing Pages
+# workflow unchanged here; it is updated afterward through the GitHub connector.
+subprocess.run(["git", "checkout", "HEAD", "--", ".github/workflows/pages.yml"], check=True)
 
 for relative in SELF_PATHS:
     target = safe_path(relative)
