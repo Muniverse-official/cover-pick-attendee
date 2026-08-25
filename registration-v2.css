@@ -1,0 +1,21 @@
+/* Unified registration controls */
+.honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+.full-span{grid-column:1/-1}
+.choice-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:2px}
+.choice-card{display:flex;align-items:center;gap:9px;min-height:48px;margin:0;padding:11px 12px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(0,5,36,.44);cursor:pointer;font-size:12.5px;line-height:1.35}
+.choice-card:has(input:checked){border-color:rgba(53,244,208,.62);background:rgba(53,244,208,.09);box-shadow:0 0 0 2px rgba(53,244,208,.08)}
+.choice-card input{width:18px;height:18px;flex:0 0 18px;margin:0;padding:0;accent-color:var(--mint)}
+.choice-card span{font-weight:750;color:#e7edff}
+.sub-field{margin-top:10px}
+.sub-field label{font-size:11px;color:#b9c8f6}
+.sub-field select,.sub-field input{width:100%}
+.privacy-grid{margin:0}
+.privacy-grid>div{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:11px 0;border-top:1px solid rgba(255,255,255,.09)}
+.privacy-grid>div:first-child{border-top:0}
+.privacy-grid dt{font-size:11px;font-weight:850;color:#d9e2ff}
+.privacy-grid dd{margin:0;font-size:11px;line-height:1.62;color:#afbee9;word-break:keep-all}
+.preview-notice{margin:0 0 18px;padding:11px 13px;border:1px solid rgba(53,244,208,.24);border-radius:11px;background:rgba(53,244,208,.07);color:#dffff8;font-size:12px;line-height:1.55;text-align:center}
+.already-card{text-align:center;padding-block:42px}
+.already-card h1{margin:0;font-size:22px;line-height:1.55;word-break:keep-all}
+.already-state footer{display:none}
+@media(max-width:520px){.choice-row{grid-template-columns:1fr}.privacy-grid>div{grid-template-columns:1fr;gap:4px}.privacy-grid dt{padding-bottom:0}.full-span{grid-column:auto}}

@@ -4,11 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="color-scheme" content="dark">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; connect-src https://tcxugltvmatbgsmcepso.supabase.co; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; connect-src https://tcxugltvmatbgsmcepso.supabase.co; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,nofollow,noarchive">
   <title>it's Live FANS PICK</title>
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./footer-unified.css">
+  <link rel="stylesheet" href="./registration-v2.css">
 </head>
 <body>
   <main class="wrap">
@@ -33,6 +35,7 @@
       <p class="lead" id="step1Desc">Enter the Muniverse account information used for the winning entry.</p>
       <div class="field"><label for="email" id="emailLabel">Muniverse account email</label><input id="email" type="email" maxlength="254" autocomplete="email" inputmode="email"></div>
       <div class="field"><label for="nickname" id="nicknameLabel">Muniverse nickname</label><input id="nickname" maxlength="80" autocomplete="off"></div>
+      <div class="honeypot" aria-hidden="true"><label for="website">Website</label><input id="website" tabindex="-1" autocomplete="off"></div>
 
       <details class="privacy" open>
         <summary id="privacyTitle">Required privacy collection &amp; use notice</summary>
@@ -51,37 +54,53 @@
     <section class="card hidden" id="step2">
       <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i></div>
       <h1 id="step2Title">Attendee information</h1>
-      <p class="lead" id="step2Desc">Enter the information that will be used for identity verification and audience notices.</p>
+      <p class="lead" id="step2Desc">Enter the information used for identity verification and audience notices.</p>
+
       <div class="grid">
         <div class="field"><label for="name" id="nameLabel">Full name</label><input id="name" maxlength="100" autocomplete="name"></div>
-        <div class="field"><label for="nationality" id="nationalityLabel">Nationality</label><select id="nationality" autocomplete="country-name"></select><p class="hint compact-hint" id="nationalityHint"></p></div>
-        <div class="field"><label for="birthDate" id="birthLabel">Date of birth</label><input id="birthDate" type="date"></div>
-      </div>
+        <div class="field"><label for="birthDate" id="birthLabel">Date of birth</label><input id="birthDate" type="date" autocomplete="bday"></div>
 
-      <div class="field field-top phone-field">
-        <label id="phoneLabel">Phone number</label>
-        <select id="phoneMode" class="phone-mode" aria-label="Phone number type"></select>
-        <div class="phone-input-row">
-          <span class="dial-prefix" id="dialPrefix">010</span>
-          <input id="phoneLocal" maxlength="30" type="tel" autocomplete="tel" inputmode="tel" placeholder="1234-5678">
+        <div class="field full-span">
+          <label id="nationalityLabel">Nationality</label>
+          <div class="choice-row" role="radiogroup" aria-labelledby="nationalityLabel">
+            <label class="choice-card"><input type="radio" name="nationalityMode" value="KR" checked><span id="nationalityKoreanLabel">Korean</span></label>
+            <label class="choice-card"><input type="radio" name="nationalityMode" value="NON_KR"><span id="nationalityForeignLabel">Not Korean</span></label>
+          </div>
+          <div id="countryWrap" class="sub-field hidden"><label for="country" id="countryLabel">Country</label><select id="country" autocomplete="country"></select></div>
+          <input id="nationality" type="hidden" value="KR">
+          <p class="hint" id="nationalityHint"></p>
         </div>
-        <div class="other-code hidden" id="otherCodeWrap"><label for="otherDialCode" id="otherDialLabel">Country calling code</label><input id="otherDialCode" maxlength="6" inputmode="tel" placeholder="+1"></div>
-        <input id="phone" type="hidden" value="">
-        <p class="hint" id="phoneHint"></p>
+
+        <div class="field full-span phone-field">
+          <label id="phoneLabel">Phone number</label>
+          <div class="choice-row" role="radiogroup" aria-labelledby="phoneLabel">
+            <label class="choice-card"><input type="radio" name="phoneMode" value="KR" checked><span id="phoneKoreanLabel">I have a Korean number</span></label>
+            <label class="choice-card"><input type="radio" name="phoneMode" value="INTL"><span id="phoneInternationalLabel">I do not have a Korean number</span></label>
+          </div>
+          <div id="koreanPhoneWrap" class="sub-field"><input id="koreanPhone" type="tel" maxlength="20" autocomplete="tel-national" inputmode="tel" placeholder="010-1234-5678"></div>
+          <div id="internationalPhoneWrap" class="sub-field hidden"><input id="internationalPhone" type="tel" maxlength="40" autocomplete="tel" inputmode="tel" placeholder="+1 212 555 1234"></div>
+          <input id="phone" type="hidden">
+          <p class="hint" id="phoneHint"></p>
+        </div>
       </div>
 
-      <div class="field field-top"><label for="contactEmail" id="contactLabel">Email for event notices</label><input id="contactEmail" type="email" maxlength="254" autocomplete="email"><p class="hint" id="contactHint">Email is also collected as a fallback where international SMS may not be delivered.</p></div>
+      <div class="field field-top"><label for="contactEmail" id="contactLabel">Email for event notices</label><input id="contactEmail" type="email" maxlength="254" autocomplete="email"><p class="hint" id="contactHint">Email is collected because international SMS delivery may be unavailable.</p></div>
       <div class="notice" id="noticeText">Participants must be at least 15 years old. A valid photo ID is required on the recording day.</div>
       <div class="message error" id="submitMessage" role="status" aria-live="polite"></div>
       <button class="primary" id="submitBtn" type="button">Complete Registration</button>
     </section>
 
-    <section class="card hidden" id="done">
-      <div class="done-wrap"><div class="done-check">&#10003;</div><h1 id="doneTitle">Registration complete</h1><p class="lead" id="doneDesc">Your attendee information has been registered. Final instructions will be sent separately.</p></div>
+    <section class="card hidden" id="done" aria-live="polite">
+      <div class="done-wrap"><div class="done-check" id="doneCheck">&#10003;</div><h1 id="doneTitle">Registration complete</h1><p class="lead" id="doneDesc">Your attendee information has been registered. Final instructions will be sent separately.</p></div>
+    </section>
+
+    <section class="card hidden already-card" id="already" aria-live="polite">
+      <h1 id="alreadyMessage">Your information has already been submitted.</h1>
     </section>
 
     <footer><a href="mailto:support@muniverse.io">support@muniverse.io</a><small>© Muniverse. All rights reserved.</small></footer>
   </main>
-  <script src="./app.js" defer></script><script src="./phone.js" defer></script><script src="./privacy-minimal.js" defer></script>
+  <script src="./app.js" defer></script>
+  <script src="./phone.js" defer></script>
 </body>
 </html>
