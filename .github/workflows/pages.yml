@@ -1,4 +1,4 @@
-name: Deploy COVER PICK site
+name: Deploy FANS PICK site
 
 on:
   push:
