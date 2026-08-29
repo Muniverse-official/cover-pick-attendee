@@ -167,7 +167,7 @@ async function callAppsScript(payload: Record<string, unknown>) {
   const response = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ version: 5, ts: String(Date.now()), nonce: crypto.randomUUID(), token, kind: "cover_pick", payload }),
+    body: JSON.stringify({ version: 3, ts: String(Date.now()), nonce: crypto.randomUUID(), token, payload }),
     redirect: "follow"
   });
   const text = await response.text();
@@ -309,12 +309,7 @@ Deno.serve(async (req: Request) => {
       const attendeeResponse = await db("cover_pick_attendees", {
         method: "POST",
         headers: { prefer: "return=minimal" },
-        body: JSON.stringify({
-          winner_id: winner.id,
-          ...payload,
-          consent_version: CONSENT_VERSION,
-          consented_at: now
-        })
+        body: JSON.stringify({ winner_id: winner.id, ...payload, consent_version: CONSENT_VERSION, consented_at: now })
       });
       if (attendeeResponse.status === 409) return json(req, { ok: false, code: "ALREADY_SUBMITTED" }, 409);
       if (!attendeeResponse.ok) throw new Error(`ATTENDEE_INSERT_FAILED:${(await attendeeResponse.text()).slice(0, 300)}`);
