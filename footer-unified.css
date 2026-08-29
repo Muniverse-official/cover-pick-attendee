@@ -6,25 +6,25 @@ footer {
   justify-content: center;
   margin: 24px -14px calc(-42px - env(safe-area-inset-bottom));
   padding: 30px 24px 32px;
-  color: #677286;
-  background: #fff;
-  border-top: 1px solid #e3e8ef;
+  color: #8fa3dd;
+  background: transparent;
+  border-top: 1px solid rgba(255,255,255,.08);
   text-align: center;
   line-height: 1.5;
 }
 footer a {
   margin-bottom: 8px;
-  color: #445167;
+  color: #dce5ff;
   font-size: 13px;
   font-weight: 650;
   text-decoration: none;
 }
 footer a:hover {
-  color: #1768c9;
+  color: #35f4d0;
   text-decoration: underline;
 }
 footer small {
-  color: #8b95a5;
+  color: #7488c8;
   font-size: 12px;
 }
 @media (max-width: 520px) {
