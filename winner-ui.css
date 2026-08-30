@@ -62,6 +62,37 @@
   outline-offset: 3px;
 }
 
+#alreadyMessage::after {
+  display: block;
+  margin-top: 14px;
+  color: #cdd9ff;
+  font-size: 15px;
+  line-height: 1.65;
+  font-weight: 500;
+  letter-spacing: normal;
+  word-break: keep-all;
+}
+
+html[lang="ko"] #alreadyMessage::after {
+  content: "입력한 정보를 수정해야 하는 경우 support@muniverse.io로 문의해 주세요.";
+}
+
+html[lang="en"] #alreadyMessage::after {
+  content: "If you need to update your information, please contact support@muniverse.io.";
+}
+
+html[lang="ja"] #alreadyMessage::after {
+  content: "登録した情報の修正が必要な場合は、support@muniverse.io までお問い合わせください。";
+}
+
+html[lang="zh-TW"] #alreadyMessage::after {
+  content: "如需修改已提交的資料，請聯絡 support@muniverse.io。";
+}
+
+html[lang="zh-CN"] #alreadyMessage::after {
+  content: "如需修改已提交的信息，请联系 support@muniverse.io。";
+}
+
 @media (max-width: 520px) {
   .winner-modal-backdrop {
     padding: 18px;
@@ -77,6 +108,10 @@
   }
 
   .winner-modal-body {
+    font-size: 14px;
+  }
+
+  #alreadyMessage::after {
     font-size: 14px;
   }
 }
