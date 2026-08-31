@@ -1,47 +1,56 @@
 (() => {
   'use strict';
 
+  const RECORDING_DATE = '2026-09-14';
   const COPY = {
     ko: {
       pageTitle: '방청 당첨 확인',
       modalTitle: '방청 당첨 내역이 없습니다',
       modalBody: '입력하신 Muniverse 가입 이메일과 닉네임으로 확인된 방청 당첨 내역이 없습니다. 입력 정보를 다시 확인해 주세요.',
       close: '확인',
-      mismatch: '당첨자 정보와 일치하지 않습니다.'
+      mismatch: '당첨자 정보와 일치하지 않습니다.',
+      invalidBirth: '생년월일을 확인해 주세요. 실제 생년월일을 입력해야 합니다.'
     },
     en: {
       pageTitle: 'Audience Winner Check',
       modalTitle: 'No winning record found',
       modalBody: 'We could not find an audience winning record matching the Muniverse email and nickname you entered. Please check your information and try again.',
       close: 'OK',
-      mismatch: 'The information does not match a winner record.'
+      mismatch: 'The information does not match a winner record.',
+      invalidBirth: 'Please check your date of birth and enter your actual date of birth.'
     },
     ja: {
       pageTitle: '観覧当選確認',
       modalTitle: '観覧当選情報が見つかりません',
       modalBody: '入力されたMuniverse登録メールアドレスとニックネームに一致する観覧当選情報はありません。入力内容をご確認ください。',
       close: '確認',
-      mismatch: '当選者情報と一致しません。'
+      mismatch: '当選者情報と一致しません。',
+      invalidBirth: '生年月日をご確認のうえ、実際の生年月日を入力してください。'
     },
     'zh-TW': {
       pageTitle: '觀眾中獎確認',
       modalTitle: '找不到觀眾中獎紀錄',
       modalBody: '以您輸入的 Muniverse 註冊信箱與暱稱，未查到相符的觀眾中獎紀錄。請確認輸入資訊後再試一次。',
       close: '確認',
-      mismatch: '資料與中獎者資訊不符。'
+      mismatch: '資料與中獎者資訊不符。',
+      invalidBirth: '請確認出生日期並填寫真實出生日期。'
     },
     'zh-CN': {
       pageTitle: '观众中奖确认',
       modalTitle: '未找到观众中奖记录',
       modalBody: '根据您输入的 Muniverse 注册邮箱和昵称，未查到匹配的观众中奖记录。请确认输入信息后重试。',
       close: '确认',
-      mismatch: '信息与中奖者记录不符。'
+      mismatch: '信息与中奖者记录不符。',
+      invalidBirth: '请确认出生日期并填写真实出生日期。'
     }
   };
 
   const lang = document.getElementById('lang');
   const heroTitle = document.getElementById('heroTitle');
   const verifyMessage = document.getElementById('verifyMessage');
+  const submitMessage = document.getElementById('submitMessage');
+  const submitButton = document.getElementById('submitBtn');
+  const birthDate = document.getElementById('birthDate');
 
   let backdrop;
   let modalTitle;
@@ -134,6 +143,29 @@
     return Object.values(COPY).some((copy) => copy.mismatch === normalized);
   }
 
+  function ageOnRecordingDate(value) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return NaN;
+    const [year, month, day] = value.split('-').map(Number);
+    const parsed = new Date(Date.UTC(year, month - 1, day));
+    if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) return NaN;
+    const [eventYear, eventMonth, eventDay] = RECORDING_DATE.split('-').map(Number);
+    let age = eventYear - year;
+    if (eventMonth < month || (eventMonth === month && eventDay < day)) age--;
+    return age;
+  }
+
+  function blockImplausibleBirthDate(event) {
+    if (event.target !== submitButton) return;
+    const value = birthDate?.value || '';
+    const age = ageOnRecordingDate(value);
+    if (Number.isFinite(age) && age <= 120) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (submitMessage) submitMessage.textContent = currentCopy().invalidBirth;
+    birthDate?.focus();
+  }
+
   if (verifyMessage) {
     const observer = new MutationObserver(() => {
       const text = verifyMessage.textContent || '';
@@ -144,6 +176,10 @@
     observer.observe(verifyMessage, { childList: true, characterData: true, subtree: true });
   }
 
+  document.addEventListener('click', blockImplausibleBirthDate, true);
+  birthDate?.addEventListener('input', () => {
+    if (submitMessage?.textContent === currentCopy().invalidBirth) submitMessage.textContent = '';
+  });
   lang?.addEventListener('change', applyPageTitle);
   applyPageTitle();
 })();
