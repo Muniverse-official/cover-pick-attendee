@@ -85,6 +85,11 @@
         </div>
       </div>
 
+      <div class="field field-top">
+        <label for="xAccount" id="xAccountLabel">X account</label>
+        <input id="xAccount" type="text" maxlength="100" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="@username" aria-describedby="xAccountHint">
+        <p class="hint" id="xAccountHint">Enter @username or an X profile URL.</p>
+      </div>
       <div class="field field-top"><label for="contactEmail" id="contactLabel">Email for event notices</label><input id="contactEmail" type="email" maxlength="254" autocomplete="email"><p class="hint" id="contactHint">Email is collected because international SMS delivery may be unavailable.</p></div>
       <div class="notice" id="noticeText">Participants must be at least 15 years old. A valid photo ID is required on the recording day.</div>
       <div class="message error" id="submitMessage" role="status" aria-live="polite"></div>
@@ -104,6 +109,7 @@
   <script src="./backend-router.js?v=20260831-split1" defer></script>
   <script src="./app.js" defer></script>
   <script src="./phone.js" defer></script>
+  <script src="./x-account.js?v=20260831-x1" defer></script>
   <script src="./winner-ui.js" defer></script>
 </body>
 </html>
