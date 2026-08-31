@@ -19,7 +19,7 @@ type WinnerRow = { id: string; submitted: boolean };
 const PROD_ORIGIN = "https://muniverse-official.github.io";
 const LOCAL_ORIGINS = new Set(["http://localhost:5173", "http://127.0.0.1:5173"]);
 const RECORDING_DATE = "2026-09-14";
-const CONSENT_VERSION = "fans-pick-attendee-2026-08-v4-split";
+const CONSENT_VERSION = "fans-pick-attendee-2026-08-v5-x-account";
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 const BURST_WINDOW_MS = 60 * 1000;
 const SUBMIT_LIMIT = 5;
@@ -30,6 +30,7 @@ const TOKEN_VERSION = 2;
 const CONTROL_PATTERN = /[\u0000-\u001f\u007f]/u;
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const BASE64URL_PATTERN = /^[A-Za-z0-9_-]+$/;
+const X_HANDLE_PATTERN = /^[A-Za-z0-9_]{1,15}$/;
 
 function allowLocalDev() {
   return Deno.env.get("ALLOW_LOCAL_DEV") === "true";
@@ -78,6 +79,14 @@ function rawString(body: JsonRecord, key: string, max: number, required = true) 
 
 function normalizeEmail(value: string) {
   return value.normalize("NFKC").trim().toLowerCase();
+}
+
+function normalizeXAccount(value: string) {
+  let raw = value.normalize("NFKC").trim();
+  raw = raw.replace(/^https?:\/\/(?:(?:www|mobile)\.)?(?:x\.com|twitter\.com)\//i, "");
+  raw = raw.split(/[/?#]/u)[0].replace(/^@+/u, "");
+  if (!X_HANDLE_PATTERN.test(raw)) return null;
+  return `@${raw}`;
 }
 
 function validEmail(value: string) {
@@ -312,13 +321,19 @@ async function callAppsScript(payload: Record<string, unknown>) {
   const url = Deno.env.get("ATTENDEE_APPS_SCRIPT_URL") || config.apps_script_url;
   if (!token || !url) return { ok: false, skipped: true, sheetUpdated: false, emailSent: false };
 
+  const contactEmail = String(payload.contact_email || "");
+  const xAccount = String(payload.x_account || "");
   const outbound = {
     ...payload,
     account_email: safeOutboundText(String(payload.account_email || "")),
     muniverse_nickname: safeOutboundText(String(payload.muniverse_nickname || "")),
     name: safeOutboundText(String(payload.name || "")),
     phone: safeOutboundText(String(payload.phone || "")),
-    contact_email: safeOutboundText(String(payload.contact_email || ""))
+    // The existing Apps Script writes contact_email into column G. Keep the
+    // script unchanged by transporting the X account in the same hidden helper
+    // cell; the Sheet's H/I array formulas split the values for display.
+    contact_email: safeOutboundText(`${contactEmail}|||${xAccount}`),
+    x_account: safeOutboundText(xAccount)
   };
 
   const response = await fetch(url, {
@@ -403,16 +418,23 @@ Deno.serve(async (req: Request) => {
     const nationalityRaw = rawString(body, "nationality", 2);
     const birthDate = rawString(body, "birth_date", 10);
     const phone = rawString(body, "phone", 40);
+    const xAccountRaw = rawString(body, "x_account", 100);
     const contactEmailRaw = rawString(body, "contact_email", 254);
-    if ([name, nationalityRaw, birthDate, phone, contactEmailRaw].some((value) => value === null || value === "")) {
+    if ([name, nationalityRaw, birthDate, phone, xAccountRaw, contactEmailRaw].some((value) => value === null || value === "")) {
       await recordRate(ipHash, "submit", false);
       await recordRate(sessionRateKey, "submit_session", false);
       return json(req, { ok: false, code: "MISSING_FIELDS" }, 400);
     }
 
     const nationality = (nationalityRaw as string).toUpperCase();
+    const xAccount = normalizeXAccount(xAccountRaw as string);
     const contactEmail = normalizeEmail(contactEmailRaw as string);
     const age = ageOnRecordingDate(birthDate as string);
+    if (!xAccount) {
+      await recordRate(ipHash, "submit", false);
+      await recordRate(sessionRateKey, "submit_session", false);
+      return json(req, { ok: false, code: "INVALID_X_ACCOUNT" }, 400);
+    }
     if (
       !validEmail(contactEmail) ||
       !validNationality(nationality) ||
@@ -470,6 +492,7 @@ Deno.serve(async (req: Request) => {
       nationality,
       birth_date: birthDate as string,
       phone: phone as string,
+      x_account: xAccount,
       contact_email: contactEmail
     };
 
@@ -515,6 +538,7 @@ Deno.serve(async (req: Request) => {
       request_id: rid,
       consent_version: CONSENT_VERSION,
       token_version: TOKEN_VERSION,
+      x_account_collected: true,
       sheet_updated: hook.sheetUpdated === true,
       email_sent: hook.emailSent === true,
       hook_skipped: hook.skipped === true
