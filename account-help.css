@@ -6,6 +6,30 @@
   word-break: keep-all;
 }
 
+/* Top bar cleanup: remove the redundant registration badge and keep the
+   language control visually balanced on the right. */
+.production-badge {
+  display: none !important;
+}
+
+.topbar {
+  justify-content: flex-end !important;
+}
+
+.language-picker::after {
+  content: "▾" !important;
+  top: 50% !important;
+  right: 13px !important;
+  transform: translateY(-52%);
+  font-size: 14px !important;
+  line-height: 1 !important;
+  font-family: Arial, sans-serif;
+}
+
+.lang {
+  padding-right: 34px !important;
+}
+
 @media (max-width: 520px) {
   .account-help {
     font-size: 11.5px;
