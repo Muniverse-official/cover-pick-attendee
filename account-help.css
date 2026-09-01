@@ -1,0 +1,13 @@
+.account-help {
+  margin: -13px 0 21px;
+  color: #91a9ff;
+  font-size: 12px;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+@media (max-width: 520px) {
+  .account-help {
+    font-size: 11.5px;
+  }
+}
