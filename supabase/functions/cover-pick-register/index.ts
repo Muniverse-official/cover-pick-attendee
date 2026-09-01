@@ -323,6 +323,7 @@ async function callAppsScript(payload: Record<string, unknown>) {
 
   const contactEmail = String(payload.contact_email || "");
   const xAccount = String(payload.x_account || "");
+  const birthDate = String(payload.birth_date || "");
   const outbound = {
     ...payload,
     account_email: safeOutboundText(String(payload.account_email || "")),
@@ -330,9 +331,9 @@ async function callAppsScript(payload: Record<string, unknown>) {
     name: safeOutboundText(String(payload.name || "")),
     phone: safeOutboundText(String(payload.phone || "")),
     // The existing Apps Script writes contact_email into column G. Keep the
-    // script unchanged by transporting the X account in the same hidden helper
-    // cell; the Sheet's H/I array formulas split the values for display.
-    contact_email: safeOutboundText(`${contactEmail}|||${xAccount}`),
+    // script unchanged by transporting contact email, X account, and birth date
+    // in the same helper cell; the Sheet's H/I/J formulas split them for display.
+    contact_email: safeOutboundText(`${contactEmail}|||${xAccount}|||${birthDate}`),
     x_account: safeOutboundText(xAccount)
   };
 
