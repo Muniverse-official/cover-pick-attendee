@@ -3,9 +3,9 @@
 
   // Absolute UTC instants corresponding to KST public registration hours.
   // Open: 2026-09-01 17:00:00 KST
-  // Close: 2026-09-04 17:00:00 KST (16:59:59 is the last accepted second)
+  // Close: 2026-09-07 17:00:00 KST (16:59:59 is the last accepted second)
   const OPEN_AT = Date.parse('2026-09-01T08:00:00Z');
-  const CLOSE_AT = Date.parse('2026-09-04T08:00:00Z');
+  const CLOSE_AT = Date.parse('2026-09-07T08:00:00Z');
 
   const COPY = {
     ko: {
@@ -72,7 +72,7 @@
   Object.defineProperty(window, '__FANS_PICK_REGISTRATION_WINDOW__', {
     value: Object.freeze({
       openAt: '2026-09-01T17:00:00+09:00',
-      closeAt: '2026-09-04T17:00:00+09:00',
+      closeAt: '2026-09-07T17:00:00+09:00',
       state
     }),
     configurable: false,
