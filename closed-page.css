@@ -1,0 +1,49 @@
+/* Keep the original page background, hero, card, and language control. */
+.closed-card {
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  padding: 44px 24px 48px;
+  text-align: center;
+}
+.closed-content { width: 100%; min-width: 0; }
+.closed-icon {
+  display: block;
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 24px;
+  fill: none;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 12px rgba(53, 244, 208, .18));
+}
+.closed-icon circle { stroke: #42bfff; }
+.closed-icon path { stroke: var(--mint); }
+.closed-card h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: -.03em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.closed-lead {
+  margin: 12px 0 0;
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--muted);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.lang:focus-visible { outline: 2px solid var(--mint); outline-offset: 4px; }
+@media (max-width: 520px) {
+  .closed-card { min-height: 285px; padding: 34px 18px 38px; }
+  .closed-icon { width: 64px; height: 64px; margin-bottom: 20px; }
+  .closed-card h1 { font-size: 22px; }
+  .closed-lead { font-size: 15px; margin-top: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .closed-icon { filter: none; }
+}
