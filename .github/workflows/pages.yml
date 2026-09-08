@@ -36,6 +36,11 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Install CJK fonts for browser screenshots
+        timeout-minutes: 4
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends fonts-noto-cjk
       - name: Verify published closure and capture browser screenshots
         timeout-minutes: 7
         env:
