@@ -3,7 +3,7 @@
   const LEGACY_ORIGIN = 'https://tcxugltvmatbgsmcepso.supabase.co';
   const ACTIVE_ORIGIN = 'https://kkaoerbblpuszptiibvo.supabase.co';
   const LEGACY_PATH = '/functions/v1/cover-pick';
-  const BASE = `${ACTIVE_ORIGIN}/functions/v1/attendee-public?program=fans_pick`;
+  const PINNED = `${ACTIVE_ORIGIN}/functions/v1/attendee-public?forceFunctionRegion=ap-northeast-2&program=fans_pick`;
   const nativeFetch = window.fetch.bind(window);
   function route(rawUrl) {
     let url;
@@ -12,20 +12,34 @@
     const isActiveCombined = url.origin === ACTIVE_ORIGIN && url.pathname === LEGACY_PATH;
     if (!isLegacyCombined && !isActiveCombined) return rawUrl;
     const action = url.searchParams.get('action');
-    if (action === 'verify') return `${BASE}&action=verify`;
-    if (action === 'submit') return `${BASE}&action=submit`;
+    if (action === 'verify') return `${PINNED}&action=verify`;
+    if (action === 'submit') return `${PINNED}&action=submit`;
     return rawUrl;
   }
-  window.fetch = (input, init) => {
-    if (typeof input === 'string' || input instanceof URL) return nativeFetch(route(String(input)), init);
+  function unpin(url) {
+    try { const u=new URL(url);u.searchParams.delete('forceFunctionRegion');return u.toString(); } catch { return url; }
+  }
+  const wait=(ms)=>new Promise(resolve=>setTimeout(resolve,ms));
+  window.fetch = async (input, init) => {
+    if (typeof input === 'string' || input instanceof URL) {
+      const routed=route(String(input));
+      const response=await nativeFetch(routed,init);
+      if(routed!==String(input)&&response.status>=500){await wait(200+Math.random()*800);return nativeFetch(unpin(routed),init)}
+      return response;
+    }
     if (input instanceof Request) {
       const routedUrl = route(input.url);
-      if (routedUrl !== input.url) return nativeFetch(new Request(routedUrl, input), init);
+      if (routedUrl !== input.url) {
+        const first=new Request(routedUrl,input),second=first.clone();
+        const response=await nativeFetch(first,init);
+        if(response.status>=500){await wait(200+Math.random()*800);return nativeFetch(new Request(unpin(routedUrl),second),init)}
+        return response;
+      }
     }
     return nativeFetch(input, init);
   };
   Object.defineProperty(window, '__FANS_PICK_BACKEND_SPLIT__', {
-    value: Object.freeze({ verify: `${BASE}&action=verify`, register: `${BASE}&action=submit` }),
+    value: Object.freeze({ verify: `${PINNED}&action=verify`, register: `${PINNED}&action=submit` }),
     configurable: false, enumerable: false, writable: false
   });
 })();
