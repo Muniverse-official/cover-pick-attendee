@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Guard approved closed homepage
+        run: python3 tools/check_closed_page.py
       - name: Configure Pages
         uses: actions/configure-pages@v6
         with:
@@ -34,3 +36,16 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify published closure and capture browser screenshots
+        timeout-minutes: 7
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: python3 tools/check_closed_page.py --url "$PAGE_URL" --screenshots "$RUNNER_TEMP/fans-pick-closed-verification"
+      - name: Save published-page verification screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fans-pick-closed-verification
+          path: ${{ runner.temp }}/fans-pick-closed-verification
+          if-no-files-found: warn
+          retention-days: 7
