@@ -1,0 +1,25 @@
+name: Reserve registration UI
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  reserve-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: Muniverse-official/music-core-attendee
+          path: qa-music
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --no-save --package-lock=false playwright@1.55.0
+      - run: npx playwright install --with-deps chromium
+      - run: node tools/reserve-ui-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fans-reserve-screenshots
+          path: qa-screenshots
