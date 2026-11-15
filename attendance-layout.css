@@ -122,11 +122,9 @@
 .attendance-compact .hero-inner::after { content: none; }
 .attendance-compact .program-logo { flex: none; width: 78px; height: auto; }
 .attendance-compact .hero-copy { width: auto; min-width: 0; margin: 0; text-align: left; }
-.attendance-compact .hero-content { min-width: 0; }
-.attendance-compact .fans-wordmark { display: flex; flex-wrap: wrap; align-items: baseline; gap: 7px; color: var(--accent); }
-.attendance-compact .fans-wordmark :is(.its, .cover) { font-size: 15px; line-height: 1.22; letter-spacing: 0; font-weight: 800; }
+.attendance-compact[data-attendee-program="fans_pick"] .program-logo { width: clamp(92px, 27vw, 132px); }
 .attendance-compact .hero #heroTitle {
-  margin: 6px 0 0;
+  margin: 0;
   color: var(--text);
   font-size: clamp(23px, 5vw, 35px);
   font-weight: 840;
@@ -136,7 +134,6 @@
   overflow-wrap: anywhere;
   text-align: left;
 }
-.attendance-compact[data-attendee-program="music_core"] #heroTitle { margin-top: 0; }
 .attendance-compact .hero #heroTitle em {
   color: var(--accent);
   font-size: .82em;
