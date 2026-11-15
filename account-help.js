@@ -2,11 +2,11 @@
   'use strict';
 
   const COPY = {
-    ko: 'Muniverse 가입 이메일과 닉네임은 Muniverse 로그인 후 마이페이지에서 확인할 수 있습니다.',
-    en: 'You can check your Muniverse account email and nickname on My Page after logging in to Muniverse.',
-    ja: 'Muniverseの登録メールアドレスとニックネームは、Muniverseにログイン後、マイページでご確認いただけます。',
-    'zh-TW': '您可以在登入 Muniverse 後，於我的頁面確認 Muniverse 註冊電子郵件與暱稱。',
-    'zh-CN': '您可以在登录 Muniverse 后，在我的页面中查看 Muniverse 注册邮箱和昵称。'
+    "ko": "뮤니버스 로그인 후 마이페이지에서\n가입 이메일과 닉네임을 확인해 주세요.",
+    "ja": "登録メールアドレスとニックネームは、\nMuniverseのマイページで確認できます。",
+    "en": "Find your account email and nickname\non My Page after signing in to Muniverse.",
+    "zh-TW": "登入 Muniverse 後，前往「我的頁面」\n即可查看帳號的註冊信箱與暱稱。",
+    "zh-CN": "登录 Muniverse 后，进入「我的页面」\n即可查看账号的注册邮箱和昵称。",
   };
 
   const lang = document.getElementById('lang');
