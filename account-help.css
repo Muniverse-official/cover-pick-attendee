@@ -1,37 +1,7 @@
-.account-help {
-  margin: -13px 0 21px;
-  color: #91a9ff;
-  font-size: 12px;
-  line-height: 1.55;
-  word-break: keep-all;
-}
-
-/* Top bar cleanup: remove the redundant registration badge and keep the
-   language control visually balanced on the right. */
-.production-badge {
-  display: none !important;
-}
-
-.topbar {
-  justify-content: flex-end !important;
-}
-
-.language-picker::after {
-  content: "▾" !important;
-  top: 50% !important;
-  right: 13px !important;
-  transform: translateY(-52%);
-  font-size: 14px !important;
-  line-height: 1 !important;
-  font-family: Arial, sans-serif;
-}
-
-.lang {
-  padding-right: 34px !important;
-}
-
-@media (max-width: 520px) {
-  .account-help {
-    font-size: 11.5px;
-  }
-}
+/* Match the ENHYPEN lookup guide. */
+.lookup-help { display: grid; gap: .28rem; margin: 0 0 1.15rem; padding: .65rem .8rem .72rem; border-left: 2px solid #ae8060; border-radius: .15rem .4rem .4rem .15rem; background: #241c17; text-align: left; }
+.lookup-help-title { margin: 0; color: #f2c9a5; font-size: .76rem; font-weight: 750; line-height: 1.45; }
+.lookup-help-steps { display: flex; align-items: baseline; flex-wrap: wrap; gap: .16rem .52rem; margin: 0; color: #f0e5dd; font-size: .86rem; line-height: 1.5; }
+.lookup-help-follow { display: inline-flex; align-items: baseline; gap: .52rem; }
+.lookup-help-steps span { word-break: keep-all; overflow-wrap: anywhere; }
+.lookup-help-arrow { color: #d9aa86; }
